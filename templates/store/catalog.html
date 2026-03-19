@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Каталог товаров — TreidPro{% endblock %}
+{% block content %}
+<div class="row g-4 align-items-start">
+    <div class="col-lg-3">
+        <div class="panel-card sticky-top" style="top: 1rem;">
+            <h1 class="h4 mb-3">Каталог товаров</h1>
+            <form method="get" class="d-grid gap-3">
+                <input type="text" class="form-control" name="q" placeholder="Поиск" value="{{ query }}">
+                <select class="form-select" name="category">
+                    <option value="">Все категории</option>
+                    {% for category in categories %}
+                        <option value="{{ category.slug }}" {% if selected_category == category.slug %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+                <button class="btn btn-dark">Применить</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-9">
+        <div class="row g-4">
+            {% for product in products %}
+                <div class="col-md-6 col-xl-4">{% include 'store/partials/product_card.html' with product=product %}</div>
+            {% empty %}
+                <div class="col-12"><div class="empty-state">Товары не найдены. Измените фильтр или заполните каталог через админку.</div></div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

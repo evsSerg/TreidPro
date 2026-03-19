@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}{{ page.title }} — TreidPro{% endblock %}
+{% block content %}
+<section class="page-hero rounded-4 mb-4 p-5">
+    <div class="small text-uppercase text-white-50 mb-2">Информация</div>
+    <h1 class="display-6 fw-bold text-white">{{ page.hero_title }}</h1>
+    <p class="lead text-white-50 mb-0">{{ page.hero_subtitle }}</p>
+</section>
+<div class="panel-card">
+    <h2 class="section-title">{{ page.title }}</h2>
+    <p class="mb-0">{{ page.content }}</p>
+</div>
+{% endblock %}

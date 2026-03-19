@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} — TreidPro{% endblock %}
+{% block content %}
+<div class="row g-5 align-items-start">
+    <div class="col-lg-6">
+        <img src="{{ product.image_url }}" class="img-fluid rounded-4 shadow-sm detail-image" alt="{{ product.name }}">
+    </div>
+    <div class="col-lg-6">
+        <div class="small text-muted mb-2">{{ product.category.name }}</div>
+        <h1 class="display-6 fw-bold">{{ product.name }}</h1>
+        <p class="lead text-muted">{{ product.short_description }}</p>
+        <div class="display-6 fw-bold text-warning mb-3">{{ product.price }} ₽</div>
+        <p>{{ product.description }}</p>
+        <div class="d-flex gap-3 flex-wrap mt-4">
+            <form method="post" action="{% url 'store:add_to_cart' product.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <button class="btn btn-warning btn-lg rounded-pill px-4">Добавить в корзину</button>
+            </form>
+            <a href="{% url 'store:catalog' %}" class="btn btn-outline-dark btn-lg rounded-pill px-4">Назад в каталог</a>
+        </div>
+        <div class="mt-4 small text-muted">На складе: {{ product.stock }} шт.</div>
+    </div>
+</div>
+
+<section class="mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="section-title mb-0">Похожие товары</h2>
+    </div>
+    <div class="row g-4">
+        {% for product in similar_products %}
+            <div class="col-md-6 col-xl-3">{% include 'store/partials/product_card.html' with product=product %}</div>
+        {% empty %}
+            <div class="col-12"><div class="empty-state">Добавьте больше товаров в эту категорию через админку.</div></div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

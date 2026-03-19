@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Акции — TreidPro{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h1 class="section-title">Акции</h1>
+        <p class="text-muted mb-0">Акции и спецпредложения управляются через Django Admin.</p>
+    </div>
+</div>
+<div class="row g-4">
+    {% for promotion in promotions %}
+        <div class="col-lg-4">
+            <div class="panel-card h-100">
+                <img src="{{ promotion.image_url }}" alt="{{ promotion.title }}" class="news-cover rounded-4 mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h2 class="h4 mb-0">{{ promotion.title }}</h2>
+                    <span class="badge text-bg-warning">{{ promotion.discount_label }}</span>
+                </div>
+                <p class="text-muted">{{ promotion.summary }}</p>
+                <p class="mb-0">{{ promotion.content }}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
