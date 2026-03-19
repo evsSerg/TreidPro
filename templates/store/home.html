@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}TreidPro — Главная{% endblock %}
+
+{% block header_banner %}
+<section class="hero-banner">
+    <div class="container py-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="badge rounded-pill text-bg-warning mb-3">Новый магазин</span>
+                <h1 class="display-4 fw-bold mb-3">Большой баннер в header для современного интернет-магазина.</h1>
+                <p class="lead text-white-50 mb-4">Каталог товаров, доставка, оплата, новости, акции, о нас и корзина — всё уже подключено и управляется через Django Admin.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a class="btn btn-warning btn-lg rounded-pill px-4" href="{% url 'store:catalog' %}">Перейти в каталог</a>
+                    <a class="btn btn-outline-light btn-lg rounded-pill px-4" href="/admin/">Открыть админку</a>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="glass-card p-4">
+                    <div class="small text-uppercase text-white-50 mb-2">Почему это удобно</div>
+                    <ul class="list-unstyled mb-0 text-white">
+                        <li class="mb-3">• Динамические товары и категории.</li>
+                        <li class="mb-3">• Редактируемое меню и информационные страницы.</li>
+                        <li class="mb-3">• Блоки «Вы просматривали» и «Рекомендуем».</li>
+                        <li>• Новости, акции и простая корзина на сессиях.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="mb-5">
+    <div class="d-flex justify-content-between align-items-end mb-3">
+        <div>
+            <h2 class="section-title">Карусель популярных товаров</h2>
+            <p class="text-muted mb-0">Слайды автоматически формируются из отмеченных товаров.</p>
+        </div>
+    </div>
+    <div id="featuredCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for product in featured_products %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="product-slide row g-0 overflow-hidden rounded-4">
+                        <div class="col-lg-6">
+                            <img src="{{ product.image_url }}" class="w-100 slide-image" alt="{{ product.name }}">
+                        </div>
+                        <div class="col-lg-6 p-4 p-lg-5 d-flex flex-column justify-content-center">
+                            <span class="badge rounded-pill text-bg-dark mb-3">Хит продаж</span>
+                            <h3 class="display-6 fw-bold">{{ product.name }}</h3>
+                            <p class="text-muted">{{ product.description }}</p>
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-3">
+                                <div class="price-tag">{{ product.price }} ₽</div>
+                                <a class="btn btn-warning rounded-pill px-4" href="{{ product.get_absolute_url }}">Подробнее</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#featuredCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#featuredCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+</section>
+
+<section class="mb-5">
+    <div class="d-flex justify-content-between align-items-end mb-3">
+        <div>
+            <h2 class="section-title">Вы просматривали</h2>
+            <p class="text-muted mb-0">Недавно открытые товары сохраняются в пользовательской сессии.</p>
+        </div>
+    </div>
+    <div class="row g-4">
+        {% for product in recent_products %}
+            <div class="col-md-6 col-xl-3">{% include 'store/partials/product_card.html' with product=product %}</div>
+        {% empty %}
+            <div class="col-12"><div class="empty-state">Пока здесь пусто. Откройте несколько товаров, и карусель начнёт наполняться.</div></div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-5">
+    <div class="d-flex justify-content-between align-items-end mb-3">
+        <div>
+            <h2 class="section-title">Рекомендуем</h2>
+            <p class="text-muted mb-0">Подборка товаров, отмеченных администратором.</p>
+        </div>
+    </div>
+    <div class="row g-4">
+        {% for product in recommended_products %}
+            <div class="col-md-6 col-xl-3">{% include 'store/partials/product_card.html' with product=product %}</div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="row g-4">
+    <div class="col-lg-6">
+        <div class="panel-card h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title mb-0">Новости</h2>
+                <a href="{% url 'store:news_list' %}" class="link-dark">Все новости</a>
+            </div>
+            {% for article in latest_news %}
+                <article class="news-item {% if not forloop.last %}border-bottom{% endif %}">
+                    <div class="small text-muted mb-2">{{ article.published_at }}</div>
+                    <h3 class="h5">{{ article.title }}</h3>
+                    <p class="mb-0 text-muted">{{ article.summary }}</p>
+                </article>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel-card h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title mb-0">Акции</h2>
+                <a href="{% url 'store:promotion_list' %}" class="link-dark">Все акции</a>
+            </div>
+            {% for promotion in latest_promotions %}
+                <article class="promo-item {% if not forloop.last %}border-bottom{% endif %}">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h3 class="h5 mb-0">{{ promotion.title }}</h3>
+                        <span class="badge text-bg-warning">{{ promotion.discount_label }}</span>
+                    </div>
+                    <p class="mb-0 text-muted">{{ promotion.summary }}</p>
+                </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

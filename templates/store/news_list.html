@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Новости — TreidPro{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+        <h1 class="section-title">Новости</h1>
+        <p class="text-muted mb-0">Раздел редактируется через администраторскую часть.</p>
+    </div>
+</div>
+<div class="row g-4">
+    {% for article in articles %}
+        <div class="col-lg-4">
+            <div class="panel-card h-100">
+                <img src="{{ article.image_url }}" alt="{{ article.title }}" class="news-cover rounded-4 mb-3">
+                <div class="small text-muted mb-2">{{ article.published_at }}</div>
+                <h2 class="h4">{{ article.title }}</h2>
+                <p class="text-muted">{{ article.summary }}</p>
+                <p class="mb-0">{{ article.content }}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
